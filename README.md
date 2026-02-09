@@ -1,192 +1,245 @@
-# 🤖 Aliado AI - WhatsApp Business Automation
+# 🤖 Aliado AI - WhatsApp Business Automation Platform
 
-**El asistente inteligente que automatiza completamente tus conversaciones de WhatsApp para vender más y atender mejor a tus clientes.**
-
-## ✨ Características
-
-### 🚀 **INTEGRACIÓN REAL DE WHATSAPP**
-- ✅ **WhatsApp Business API** oficial de Meta
-- ✅ **Webhooks reales** para recibir mensajes
-- ✅ **Respuestas automáticas** con IA Gemini
-- ✅ **Conversaciones con memoria** y contexto
-- ✅ **Escalamiento inteligente** a humanos
-
-### 🧠 **IA Avanzada**
-- ✅ **Gemini AI** para respuestas naturales
-- ✅ **Detección de intenciones** (precios, quejas, saludos)
-- ✅ **Personalización por negocio** (tono, rol, conocimiento)
-- ✅ **Soporte multimodal** (texto, imágenes)
-
-### 💼 **Gestión de Negocios**
-- ✅ **Múltiples bots** para diferentes negocios
-- ✅ **Configuración visual** sin código
-- ✅ **Métricas en tiempo real** de conversaciones
-- ✅ **Widget web** para sitios web
-
-## 🚀 Instalación y Configuración
-
-### Paso 1: Dependencias
-```bash
-npm install
-cd backend && npm install
-```
-
-### Paso 2: Variables de Entorno
-```bash
-# Frontend (.env.local)
-GEMINI_API_KEY=tu-gemini-api-key
-
-# Backend (backend/.env)  
-GEMINI_API_KEY=tu-gemini-api-key
-WHATSAPP_ACCESS_TOKEN=tu-meta-access-token
-WHATSAPP_PHONE_NUMBER_ID=tu-phone-number-id
-```
-
-### Paso 3: Ejecutar
-```bash
-# Terminal 1 - Frontend
-npm run dev
-
-# Terminal 2 - Backend  
-cd backend && npm run dev
-```
-
-## 📱 Configuración de WhatsApp
-
-### 1. Meta Business Setup
-1. Ve a [Meta for Developers](https://developers.facebook.com/)
-2. Crea una nueva app Business
-3. Agrega el producto WhatsApp
-4. Obtén tu Access Token y Phone Number ID
-
-### 2. Webhook Configuration
-1. Usa `ngrok http 3001` para exponer tu servidor local
-2. Configura webhook en Meta con tu URL de ngrok
-3. Verify Token: `aliado_webhook_verify_token_2024`
-
-### 3. Configuración Guiada
-1. Abre la app en http://localhost:3000
-2. Ve a "Conectar WhatsApp" 
-3. Sigue el asistente paso a paso
-4. ¡Tu bot estará funcionando!
-
-## 🏗️ Arquitectura
-
-### Frontend (React + TypeScript)
-- **App.tsx** - Aplicación principal
-- **ConnectGuide.tsx** - Configuración de WhatsApp
-- **BotTrainer.tsx** - Entrenamiento de bots
-- **BotTester.tsx** - Pruebas de conversación
-
-### Backend (Node.js + Express)
-- **server.js** - Servidor principal con webhooks
-- **message-processor.js** - IA para procesar mensajes  
-- **meta-business.js** - Integración con Meta Business
-- **response-manager.js** - Envío de mensajes con reintentos
-
-### Servicios
-- **geminiService.ts** - Integración con Gemini AI
-- **whatsappIntegration.ts** - Cliente para backend
-
-## 📊 Características Técnicas
-
-### Procesamiento de Mensajes
-- ✅ **Webhooks en tiempo real** de Meta Business
-- ✅ **Detección automática de intención** del usuario
-- ✅ **Escalamiento inteligente** cuando se requiere humano
-- ✅ **Sistema de reintentos** para mensajes fallidos
-- ✅ **Gestión de conversaciones** con contexto temporal
-
-### Tipos de Respuestas
-- ✅ **Mensajes de texto** con emojis
-- ✅ **Botones interactivos** para opciones
-- ✅ **Listas de selección** para muchas opciones
-- ✅ **Imágenes con caption** para productos
-- ✅ **Documentos PDF** para catálogos
-
-## 🎯 Casos de Uso
-
-### Para Negocios
-- **Restaurantes** - Tomar pedidos, horarios, menú
-- **E-commerce** - Consultas de productos, seguimiento de pedidos
-- **Servicios** - Agendar citas, cotizaciones, soporte
-- **Real Estate** - Información de propiedades, visitas
-- **Salud** - Agendar consultas, recordatorios
-
-### Para Desarrolladores/Agencias
-- **SaaS WhatsApp** para múltiples clientes
-- **Automatización de atención al cliente**
-- **Generación de leads** automática
-- **Integración con CRMs** existentes
-
-## 📈 Beneficios
-
-### Para el Negocio
-- ⚡ **Respuesta inmediata** 24/7 a clientes
-- 💰 **Aumento en ventas** por atención rápida
-- 🕒 **Ahorro de tiempo** en tareas repetitivas  
-- 📊 **Métricas detalladas** de conversaciones
-- 🏆 **Mejor experiencia** de cliente
-
-### Para Desarrolladores
-- 🔧 **Arquitectura escalable** y bien documentada
-- 🎨 **UI/UX profesional** lista para producción
-- 🧪 **Fácil testing** y configuración
-- 📚 **Código bien comentado** y estructurado
-- 🔒 **Seguridad integrada** y validaciones
-
-## 📚 Documentación
-
-- **[WHATSAPP_SETUP_REAL.md](./WHATSAPP_SETUP_REAL.md)** - Guía completa de configuración
-- **[backend/README.md](./backend/README.md)** - Documentación del backend
-- **Código comentado** - Todas las funciones documentadas
-
-## 🛡️ Producción
-
-### Recomendaciones
-- ✅ Usar dominio real con HTTPS (no ngrok)
-- ✅ Base de datos para persistir configuraciones
-- ✅ Rate limiting para evitar abuse
-- ✅ Monitoring y alertas de errores
-- ✅ Backup de conversaciones importantes
-
-### Escalabilidad
-- ✅ **Microservicios** separados por funcionalidad
-- ✅ **Queue system** para mensajes de alta volumetría
-- ✅ **LoadBalancer** para múltiples instancias
-- ✅ **Redis** para cache y sesiones
-- ✅ **Database** para persistencia
-
-## 💡 Próximas Funcionalidades
-
-- 🔄 **Integración con CRMs** (Hubspot, Salesforce)
-- 📊 **Dashboard de Analytics** avanzado 
-- 🎯 **Campañas automáticas** de marketing
-- 🗣️ **Soporte de voz** para audio messages
-- 🌐 **Multi-idioma** automático
-- 🤖 **Entrenamientos personalizados** por industria
-
-## 🤝 Contribución
-
-Este proyecto está abierto a contribuciones. Si quieres agregar funcionalidades:
-
-1. Fork del repositorio
-2. Crea una rama feature
-3. Realiza tus cambios
-4. Prueba todo funcionando
-5. Crea un Pull Request
-
-## 📞 Soporte
-
-¿Necesitas ayuda con la implementación?
-
-- 📧 **Email**: soporte@aliadoia.com  
-- 💬 **WhatsApp**: +54 9 11 1234-5678
-- 📋 **Issues**: GitHub Issues de este repo
-- 📖 **Docs**: Revisa los archivos README
+**Plataforma de automatización inteligente para WhatsApp Business con IA de nueva generación. Migrado a **.NET 9** para máximo rendimiento y escalabilidad.**
 
 ---
 
-**🎉 ¡Felicidades! Ahora tienes una solución completa y profesional de automatización de WhatsApp Business!** 
+## ✨ **Características Principales**
 
-*Made with ❤️ by the Aliado AI Team*
+### 🚀 **INTEGRACIÓN WHATSAPP REAL**
+- ✅ **WhatsApp Business API** oficial de Meta
+- ✅ **Webhooks en tiempo real** para mensajes
+- ✅ **Respuestas automáticas** con Gemini AI
+- ✅ **Conversaciones con memoria** y contexto
+- ✅ **Escalamiento inteligente** a humanos
+
+### 🧠 **IA GEMINI AVANZADA**
+- ✅ **Gemini 1.5 Flash** para respuestas naturales
+- ✅ **Detección de intenciones** (ventas, soporte, info)
+- ✅ **Personalización por negocio** (tono, rol, conocimiento)
+- ✅ **Entrenamiento personalizado** con FAQs
+- ✅ **Multi-idioma** y contextual
+
+### 💼 **GESTIÓN EMPRESARIAL**
+- ✅ **Multi-bot** para diferentes negocios
+- ✅ **Dashboard visual** sin código
+- ✅ **Métricas en tiempo real** y analytics
+- ✅ **Widget web embebible** para sitios
+- ✅ **Sistema de suscripciones** y planes
+
+### 🔥 **ARQUITECTURA MODERNA**
+- ✅ **Frontend React 19** con TypeScript
+- ✅ **Backend .NET 9** de alto rendimiento
+- ✅ **Azure-ready** para producción
+- ✅ **RESTful APIs** completamente documentadas
+- ✅ **In-memory storage** con migración Azure preparada
+
+---
+
+## 🚀 **Instalación Rápida**
+
+### **1. Prerequisitos**
+```bash
+# Verificar versiones
+node --version   # v18+
+dotnet --version # 9.0+
+```
+
+### **2. Instalar Dependencias**
+```bash
+# Frontend React
+npm install
+
+# Backend .NET 9
+cd backend
+dotnet restore
+cd ..
+```
+
+### **3. Configuración**
+```bash
+# Frontend - .env.local (crear si no existe)
+VITE_API_URL=http://localhost:5000
+
+# Backend - backend/appsettings.Development.json (ya configurado)
+# Gemini API Key: AIzaSyCtlYLwS6UtkR_anqMpAa4_pHXDTRKo7j0
+# WhatsApp Token: [Ya configurado para demo]
+```
+
+### **4. Ejecutar Aplicación**
+```bash
+# Terminal 1 - Backend .NET 9 (puerto 5000)
+cd backend
+dotnet run
+
+# Terminal 2 - Frontend React (puerto 3000)
+npm run dev
+```
+
+---
+
+## 🌐 **URLs de la Aplicación**
+
+| Servicio | URL | Descripción |
+|----------|-----|-------------|
+| **Frontend** | http://localhost:3000 | Interfaz principal React |
+| **Backend API** | http://localhost:5000 | APIs REST .NET 9 |
+| **Swagger Docs** | http://localhost:5000/swagger | Documentación automática |
+| **Health Check** | http://localhost:5000/health | Estado del sistema |
+| **Demo Data** | http://localhost:5000/api/demo-data | Datos de muestra |
+
+---
+
+## 📁 **Estructura del Proyecto**
+
+```
+Aliado-AI/
+├── 📱 Frontend (React 19 + TypeScript)
+│   ├── components/          # Componentes UI reutilizables
+│   ├── services/           # Servicios y APIs
+│   ├── App.tsx             # App principal
+│   └── vite.config.ts      # Configuración Vite
+│
+├── 🔥 Backend (.NET 9 + C#)
+│   ├── Controllers/        # API REST endpoints
+│   ├── Services/           # Lógica de negocio
+│   ├── Models/             # Entidades de datos
+│   ├── DTOs/               # Data Transfer Objects
+│   └── Program.cs          # Configuración servidor
+│
+└── 📦 Archive
+    └── backend-nodejs/     # Backend Node.js anterior
+```
+
+---
+
+## 🎯 **APIs Principales**
+
+### **🔍 Sistema**
+```bash
+GET  /health                    # Estado del servidor
+GET  /api/demo-data            # Datos de demostración
+GET  /swagger                  # Documentación API
+```
+
+### **👥 Usuarios**
+```bash
+GET    /api/users              # Listar usuarios
+POST   /api/users              # Crear usuario
+GET    /api/users/{id}         # Obtener usuario
+PUT    /api/users/{id}         # Actualizar usuario
+DELETE /api/users/{id}         # Eliminar usuario
+```
+
+### **🏢 Negocios**
+```bash
+GET  /api/businesses           # Listar negocios
+POST /api/businesses           # Crear negocio
+GET  /api/businesses/{id}      # Obtener negocio
+PUT  /api/businesses/{id}      # Actualizar negocio
+```
+
+### **🤖 Bots**
+```bash
+GET  /api/bots                 # Listar bots
+POST /api/bots                 # Crear bot
+GET  /api/bots/{id}/config     # Configuración bot
+POST /api/bots/{id}/config     # Guardar configuración
+```
+
+### **📱 WhatsApp**
+```bash
+GET  /api/whatsapp/webhook/{botId}     # Verificar webhook
+POST /api/whatsapp/webhook/{botId}     # Procesar mensajes
+POST /api/whatsapp/test/send           # Enviar mensaje prueba
+```
+
+---
+
+## 🧪 **Datos de Demo**
+
+El sistema **inicializa automáticamente** datos de demostración:
+
+- 👤 **Usuario Demo**: `demo@aliado-ai.com` (plan pro)
+- 🍴 **Restaurante Demo**: "Demo Restaurant" (argentino)
+- 🤖 **Bot Demo**: Asistente entrenado para restaurante
+- 📚 **FAQs**: Horarios, especialidades, reservas
+- 📊 **Métricas**: Conversaciones y performance
+
+---
+
+## 🔧 **Desarrollo**
+
+### **VS Code (Recomendado)**
+```bash
+# Extensiones recomendadas
+ext install ms-dotnettools.csharp        # C# support
+ext install bradlc.vscode-tailwindcss    # Tailwind CSS
+ext install ms-vscode.vscode-typescript  # TypeScript
+```
+
+### **Testing APIs**
+```bash
+# Swagger UI
+http://localhost:5000/swagger
+
+# Ejemplos curl
+curl http://localhost:5000/health
+curl http://localhost:5000/api/users
+curl http://localhost:5000/api/demo-data
+```
+
+---
+
+## 📦 **Deploy & Producción**
+
+### **Frontend (Vercel/Netlify)**
+```bash
+npm run build
+# Deploy carpeta dist/
+```
+
+### **Backend (Azure App Service)**
+```bash
+dotnet publish -c Release
+# Deploy a Azure App Service
+```
+
+### **Variables de Producción**
+```json
+{
+  "Gemini": { "ApiKey": "tu-gemini-key-production" },
+  "WhatsApp": {
+    "AccessToken": "tu-whatsapp-token",
+    "PhoneNumberId": "tu-phone-number-id"
+  }
+}
+```
+
+---
+
+## 🎉 **Features Implementados**
+
+✅ **Sistema completo de usuarios y autenticación**  
+✅ **Gestión multi-negocio con bots personalizados**  
+✅ **Integración WhatsApp Business API real**  
+✅ **IA Gemini con entrenamiento personalizado**  
+✅ **APIs REST completamente documentadas**  
+✅ **Storage abstracto con migración Azure preparada**  
+✅ **Sistema de métricas y analytics**  
+✅ **Frontend responsive con componentes modernos**  
+
+---
+
+## 🚀 **Próximas Features**
+
+🔄 **Autenticación JWT**  
+☁️ **Migración a Azure Storage Account**  
+📊 **Dashboard analytics avanzado**  
+🔔 **Sistema de notificaciones**  
+🐳 **Containerización Docker**  
+🌍 **Deploy automatizado CI/CD**  
+
+---
+
+**¡Potencia tu negocio con Aliado AI! 🚀**

@@ -9,6 +9,7 @@ import BotStats from './components/BotStats';
 import Auth from './components/Auth';
 import SubscriptionGate from './components/SubscriptionGate';
 import { BotConfig, User } from './types';
+import { dataService } from './services/dataService';
 
 // Modal de Confirmación Interno
 const ConfirmDeleteModal: React.FC<{ 
@@ -70,12 +71,47 @@ const App: React.FC = () => {
     }
   ]);
   const [activeBotId, setActiveBotId] = useState<string | null>('b1-ventas-premium');
+  const [demoDataLoaded, setDemoDataLoaded] = useState(false);
 
   useEffect(() => {
     if (user && !user.isSubscribed) {
       setActiveTab('billing');
     }
   }, [user?.isSubscribed]);
+
+  // Cargar datos demo desde Azure Storage
+  useEffect(() => {
+    const loadDemoData = async () => {
+      try {
+        const demoData = await dataService.getCompleteDemoData();
+        
+        if (demoData.bot && demoData.business) {
+          // Update the default bot with demo data from Azure Storage
+          setBots(prev => prev.map(bot => 
+            bot.id === 'b1-ventas-premium' ? {
+              ...bot,
+              name: demoData.business.name,
+              businessType: demoData.bot.businessType,
+              role: demoData.bot.role,
+              tone: demoData.bot.tone,
+              knowledgeBase: demoData.bot.knowledgeBase,
+              webConfig: {
+                ...bot.webConfig,
+                welcomeMessage: demoData.bot.webConfig?.welcomeMessage || bot.webConfig?.welcomeMessage || '¡Hola! ¿Cómo puedo ayudarte?',
+                primaryColor: demoData.bot.webConfig?.primaryColor || bot.webConfig?.primaryColor || '#10b981'
+              }
+            } : bot
+          ));
+          setDemoDataLoaded(true);
+        }
+      } catch (error) {
+        console.error('Error loading demo data:', error);
+        setDemoDataLoaded(true); // Mark as loaded even on error
+      }
+    };
+
+    loadDemoData();
+  }, []);
 
   const activeBot = bots.find(b => b.id === activeBotId) || bots[0] || null;
 

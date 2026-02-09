@@ -15,22 +15,14 @@ const ConnectGuide: React.FC<Props> = ({ bot }) => {
   const [testPhone, setTestPhone] = useState('');
   const [setupStage, setSetupStage] = useState<'config' | 'validate' | 'test' | 'complete'>('config');
   const [validationResults, setValidationResults] = useState<any>(null);
-  const [backendStatus, setBackendStatus] = useState<'checking' | 'online' | 'offline'>('checking');
   const [isLoading, setIsLoading] = useState(false);
 
   const webhookUrl = whatsappIntegration.getWebhookUrl(bot.id);
   const verifyToken = whatsappIntegration.getVerifyToken();
 
   useEffect(() => {
-    checkBackendStatus();
     syncBotWithBackend();
   }, [bot]);
-
-  const checkBackendStatus = async () => {
-    setBackendStatus('checking');
-    const health = await whatsappIntegration.checkBackendHealth();
-    setBackendStatus(health.status === 'OK' ? 'online' : 'offline');
-  };
 
   const syncBotWithBackend = async () => {
     await whatsappIntegration.syncBotWithBackend(bot);
@@ -152,35 +144,11 @@ const ConnectGuide: React.FC<Props> = ({ bot }) => {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-700">
-      {/* Backend Status */}
-      <div className={`p-4 rounded-xl border-2 text-center ${
-        backendStatus === 'online' ? 'bg-green-50 border-green-200' :
-        backendStatus === 'offline' ? 'bg-red-50 border-red-200' :
-        'bg-yellow-50 border-yellow-200'
-      }`}>
-        <div className="flex items-center justify-center gap-3">
-          <div className={`w-3 h-3 rounded-full ${
-            backendStatus === 'online' ? 'bg-green-500' :
-            backendStatus === 'offline' ? 'bg-red-500' :
-            'bg-yellow-500 animate-pulse'
-          }`}></div>
-          <span className="text-sm font-bold">
-            Backend {backendStatus === 'online' ? 'Conectado' : 
-                   backendStatus === 'offline' ? 'Desconectado' : 'Verificando...'}
-          </span>
-        </div>
-        {backendStatus === 'offline' && (
-          <p className="text-xs text-red-600 mt-2">
-            Asegúrate de que el servidor backend esté ejecutándose en localhost:3001
-          </p>
-        )}
-      </div>
-
       {/* Main Setup Card */}
       <div className="card p-8 lg:p-10 bg-white">
         <div className="mb-10 text-center">
           <h2 className="text-2xl lg:text-3xl font-bold text-slate-900 tracking-tight">
-            Conecta WhatsApp Real: {bot.name}
+            Conecta WhatsApp: {bot.name}
           </h2>
           <p className="text-sm text-slate-500 max-w-md mx-auto mt-2 font-medium leading-relaxed">
             Configuración completa para WhatsApp Business API con Meta
@@ -224,7 +192,7 @@ const ConnectGuide: React.FC<Props> = ({ bot }) => {
             
             <button
               onClick={handleValidateToken}
-              disabled={isLoading || backendStatus !== 'online'}
+              disabled={isLoading}
               className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? 'Validando...' : 'Validar Token y Continuar'}

@@ -1,6 +1,7 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BotConfig, KnowledgeAsset } from '../types';
+import { dataService } from '../services/dataService';
 
 interface Props {
   config: BotConfig;
@@ -8,6 +9,44 @@ interface Props {
 }
 
 const BotTrainer: React.FC<Props> = ({ config, setConfig }) => {
+  const [trainingData, setTrainingData] = useState<any[]>([]);
+  const [demoBot, setDemoBot] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadDemoData = async () => {
+      try {
+        setLoading(true);
+        const demoData = await dataService.getCompleteDemoData();
+        
+        if (demoData.bot) {
+          setDemoBot(demoData.bot);
+          // Update config with demo data if it's empty
+          if (!config.name || config.name === "Mi Aliado de Ventas") {
+            setConfig({
+              ...config,
+              name: demoData.bot.name,
+              businessType: demoData.bot.businessType,
+              role: demoData.bot.role,
+              tone: demoData.bot.tone,
+              knowledgeBase: demoData.bot.knowledgeBase
+            });
+          }
+        }
+        
+        if (demoData.trainingData) {
+          setTrainingData(demoData.trainingData);
+        }
+      } catch (error) {
+        console.error('Error loading demo data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadDemoData();
+  }, []);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setConfig({ ...config, [e.target.name]: e.target.value });
   };
@@ -99,6 +138,74 @@ const BotTrainer: React.FC<Props> = ({ config, setConfig }) => {
           </button>
         </div>
       </div>
+
+      {/* Sección de Datos de Entrenamiento desde Azure Storage */}
+      {trainingData.length > 0 && (
+        <div className="card p-8 bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
+          <div className="mb-6">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-8 h-8 bg-green-500 text-white rounded-lg flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </div>
+              <h3 className="text-lg font-black text-slate-900">Datos de Entrenamiento Cargados</h3>
+              <span className="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded-full">Azure Storage</span>
+            </div>
+            <p className="text-xs text-slate-600 font-medium">
+              Preguntas y respuestas cargadas desde Azure Table Storage para entrenar a tu bot.
+            </p>
+          </div>
+
+          <div className="grid gap-4">
+            {trainingData.slice(0, 3).map((item, index) => (
+              <div key={index} className="bg-white border border-green-200 rounded-xl p-4">
+                <div className="mb-2">
+                  <span className="text-[10px] font-black text-green-600 uppercase tracking-widest">
+                    {item.category || 'General'}
+                  </span>
+                </div>
+                <div className="space-y-2">
+                  <div>
+                    <p className="text-xs font-bold text-slate-700">Pregunta:</p>
+                    <p className="text-sm text-slate-900 font-medium">{item.question}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-slate-700">Respuesta:</p>
+                    <p className="text-sm text-slate-600">{item.answer}</p>
+                  </div>
+                  {item.tags && item.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-1 pt-2">
+                      {item.tags.map((tag: string, tagIndex: number) => (
+                        <span key={tagIndex} className="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-1 rounded-full">
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {trainingData.length > 3 && (
+            <div className="mt-4 text-center">
+              <p className="text-xs text-slate-500 font-medium">
+                Y {trainingData.length - 3} preguntas más cargadas desde Azure Storage...
+              </p>
+            </div>
+          )}
+
+          {!loading && (
+            <div className="text-xs text-slate-500 flex items-center gap-2 mt-4 pt-4 border-t border-green-200">
+              <div className="w-2 h-2 rounded-full bg-green-500"></div>
+              <span className="font-medium">
+                ✅ Datos sincronizados con Azure Table Storage - Total: {trainingData.length} preguntas
+              </span>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

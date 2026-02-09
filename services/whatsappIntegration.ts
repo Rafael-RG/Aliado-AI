@@ -3,7 +3,7 @@
  * Connects to the real backend API for WhatsApp functionality
  */
 
-const API_BASE_URL = 'http://localhost:3001/api';
+const API_BASE_URL = 'http://localhost:5000/api';
 
 export interface WhatsAppSetup {
   accessToken: string;
@@ -217,7 +217,22 @@ class WhatsAppIntegrationService {
       const response = await fetch(`${this.baseUrl.replace('/api', '')}/health`);
       
       if (response.ok) {
-        return await response.json();
+        const healthData = await response.json();
+        
+        // Handle .NET backend response format
+        if (healthData.success && healthData.data) {
+          return {
+            status: healthData.data.status,
+            timestamp: healthData.data.timestamp,
+            bots: healthData.data.data?.bots
+          };
+        }
+        
+        // Fallback for direct response format
+        return healthData.status ? healthData : {
+          status: 'UNKNOWN',
+          error: 'Unexpected response format'
+        };
       } else {
         return {
           status: 'ERROR',
@@ -240,7 +255,7 @@ class WhatsAppIntegrationService {
     // In production, replace localhost with your actual domain
     const baseWebhookUrl = process.env.NODE_ENV === 'production' 
       ? 'https://your-production-domain.com' 
-      : 'http://localhost:3001';
+      : 'http://localhost:5000';
     
     return `${baseWebhookUrl}/api/whatsapp/webhook/${botId}`;
   }
