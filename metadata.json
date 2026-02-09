@@ -1,0 +1,8 @@
+
+{
+  "name": "Aliado | IA para tu Negocio",
+  "description": "El asistente inteligente que te ayuda a vender más y atender mejor a tus clientes.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
