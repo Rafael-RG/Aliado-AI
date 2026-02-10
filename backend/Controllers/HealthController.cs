@@ -31,6 +31,12 @@ public class HealthController : ControllerBase
             service = "Aliado AI WhatsApp Backend (.NET 9)",
             version = "2.0.0",
             status = "Running",
+            legal = new
+            {
+                terms = "/legal",
+                privacy = "/privacy",
+                description = "Legal pages available for Meta WhatsApp Business API verification"
+            },
             endpoints = new
             {
                 health = "GET /health",
@@ -38,7 +44,9 @@ public class HealthController : ControllerBase
                 whatsapp_webhook = "GET/POST /api/whatsapp/webhook/{botId}",
                 users = "GET/POST /api/users",
                 businesses = "GET/POST /api/businesses",
-                bots = "GET/POST /api/bots"
+                bots = "GET/POST /api/bots",
+                legal_terms = "GET /legal",
+                legal_privacy = "GET /privacy"
             },
             documentation = "https://developers.facebook.com/docs/whatsapp"
         });

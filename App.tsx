@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ICONS } from './constants';
 import BotTrainer from './components/BotTrainer';
 import BotTester from './components/BotTester';
@@ -8,6 +9,9 @@ import WebWidgetConfigurator from './components/WebWidgetConfigurator';
 import BotStats from './components/BotStats';
 import Auth from './components/Auth';
 import SubscriptionGate from './components/SubscriptionGate';
+import UserProfile from './components/UserProfile';
+import TermsAndConditions from './components/TermsAndConditions';
+import UsageGuidePage from './components/UsageGuidePage';
 import { BotConfig, User } from './types';
 import { dataService } from './services/dataService';
 
@@ -48,8 +52,9 @@ const ConfirmDeleteModal: React.FC<{
 );
 
 const App: React.FC = () => {
+  const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'train' | 'test' | 'deploy' | 'web-deploy' | 'billing' | 'stats'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'train' | 'test' | 'deploy' | 'web-deploy' | 'billing' | 'stats' | 'profile' | 'terms' | 'usage'>('dashboard');
   const [botToDelete, setBotToDelete] = useState<BotConfig | null>(null);
   
   const [bots, setBots] = useState<BotConfig[]>([
@@ -240,7 +245,11 @@ const App: React.FC = () => {
           </button>
         </nav>
 
-        <div className="p-6">
+        <div className="p-6 space-y-3">
+          <button onClick={() => setActiveTab('profile')} className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl text-sm transition-all ${activeTab === 'profile' ? 'bg-slate-100 text-slate-700 font-semibold' : 'text-slate-500 hover:text-slate-700'}`}>
+            <ICONS.User className="w-5 h-5" /> 
+            <span className="font-medium">Mi Perfil</span>
+          </button>
           <button onClick={() => setUser(null)} className="text-[10px] font-bold text-slate-400 hover:text-red-500 transition-colors uppercase tracking-widest">Cerrar Sesión</button>
         </div>
       </aside>
@@ -375,6 +384,26 @@ const App: React.FC = () => {
             {activeTab === 'deploy' && activeBot && <ConnectGuide bot={activeBot} />}
             {activeTab === 'web-deploy' && activeBot && <WebWidgetConfigurator config={activeBot} setConfig={updateActiveBot} />}
             {activeTab === 'billing' && <SubscriptionGate onSuccess={() => setUser({...user, isSubscribed: true, plan: 'pro'})} />}
+            {activeTab === 'profile' && <UserProfile 
+              user={user} 
+              onUpdateUser={(updates) => setUser(user ? {...user, ...updates} : null)}
+              onLogout={() => setUser(null)}
+              onNavigate={(page) => {
+                if (page === 'terms') {
+                  // Cambiar URL sin navegar para mantener contexto del usuario
+                  window.history.pushState({}, '', '/terminos-de-uso-y-condiciones');
+                  setActiveTab('terms');
+                } else {
+                  setActiveTab(page as any);
+                }
+              }}
+            />}
+            {activeTab === 'terms' && <TermsAndConditions onClose={() => {
+              // Restaurar URL y volver al perfil
+              window.history.pushState({}, '', '/');
+              setActiveTab('profile');
+            }} />}
+            {activeTab === 'usage' && <UsageGuidePage onClose={() => setActiveTab('profile')} />}
           </div>
         )}
       </main>

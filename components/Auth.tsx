@@ -124,16 +124,23 @@ const Auth: React.FC<Props> = ({ onLogin }) => {
           </button>
         </div>
 
-        <div className="mt-8 text-center">
+        <div className="mt-8 text-center space-y-4">
           <button 
             onClick={() => setView(view === 'login' ? 'register' : 'login')}
-            className="text-sm font-bold text-slate-400 hover:text-[#10b981] transition-colors"
+            className="text-sm font-bold text-slate-400 hover:text-[#10b981] transition-colors block mx-auto"
           >
             {view === 'login' ? '¿Eres nuevo? Regístrate aquí' : '¿Ya tienes cuenta? Entra'}
           </button>
+          
+          <a 
+            href="/terminos-de-uso-y-condiciones"
+            className="text-xs font-medium text-slate-300 hover:text-slate-500 transition-colors inline-block"
+          >
+            Términos y Condiciones de Uso
+          </a>
         </div>
 
-        <p className="text-[9px] text-slate-200 font-bold uppercase tracking-[0.4em] text-center mt-12">ALIADO IA</p>
+        <p className="text-[9px] text-slate-200 font-bold uppercase tracking-[0.4em] text-center mt-8">ALIADO IA</p>
       </div>
     </div>
   );
