@@ -71,24 +71,45 @@ if (app.Environment.IsDevelopment())
 // Use CORS
 app.UseCors("AllowAll");
 
+// Add health check endpoint
+app.MapGet("/health", () => new { 
+    Status = "Healthy", 
+    Timestamp = DateTime.UtcNow,
+    Environment = app.Environment.EnvironmentName 
+});
+
 // Map controllers
 app.MapControllers();
 
-// Initialize data storage
-using (var scope = app.Services.CreateScope())
+// Initialize data storage safely
+try
 {
-    var dataStorage = scope.ServiceProvider.GetRequiredService<IDataStorageService>();
-    await dataStorage.InitializeAsync();
+    using (var scope = app.Services.CreateScope())
+    {
+        var dataStorage = scope.ServiceProvider.GetRequiredService<IDataStorageService>();
+        await dataStorage.InitializeAsync();
+        logger.LogInformation("✅ Data storage initialized successfully");
+    }
+}
+catch (Exception ex)
+{
+    logger.LogError(ex, "❌ Failed to initialize data storage - app will continue without it");
 }
 
 // Environment configuration check
 var configuration = app.Services.GetRequiredService<IConfiguration>();
 var logger = app.Services.GetRequiredService<ILogger<Program>>();
 
-// Configure port
-var port = configuration.GetValue<int?>("PORT") ?? 5000;
-app.Urls.Clear();
-app.Urls.Add($"http://localhost:{port}");
+// Configure port for Azure App Service
+var port = Environment.GetEnvironmentVariable("PORT") ?? 
+           configuration.GetValue<string>("PORT") ?? "5000";
+
+// Only configure URLs in development
+if (app.Environment.IsDevelopment())
+{
+    app.Urls.Clear();
+    app.Urls.Add($"http://localhost:{port}");
+}
 
 logger.LogInformation(@"
 🚀 Aliado AI Backend Server (.NET 9)
