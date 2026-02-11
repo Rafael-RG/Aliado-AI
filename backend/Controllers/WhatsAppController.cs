@@ -44,7 +44,7 @@ public class WhatsAppController : ControllerBase
         }
         
         _logger.LogWarning("❌ Webhook verification failed");
-        return Forbid();
+        return Unauthorized();
     }
     
     // Bot-specific webhook endpoint
@@ -70,7 +70,7 @@ public class WhatsAppController : ControllerBase
         }
         
         _logger.LogWarning("❌ Bot webhook verification failed for {BotId}", botId);
-        return Forbid();
+        return Unauthorized();
     }
     
     // Legacy webhook handler
