@@ -36,15 +36,8 @@ builder.Services.AddLogging(logging =>
     logging.SetMinimumLevel(LogLevel.Information);
 });
 
-// Register application services
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddSingleton<IDataStorageService, InMemoryDataStorageService>();
-}
-else
-{
-    builder.Services.AddSingleton<IDataStorageService, AzureStorageService>();
-}
+// Register application services - Always use Azure Storage
+builder.Services.AddSingleton<IDataStorageService, AzureStorageService>();
 builder.Services.AddScoped<IGeminiService, GeminiService>();
 builder.Services.AddScoped<IWhatsAppService, WhatsAppService>();
 

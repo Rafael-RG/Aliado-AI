@@ -24,17 +24,15 @@ public class AzureStorageService : IDataStorageService
         
         if (string.IsNullOrEmpty(connectionString))
         {
-            _logger.LogWarning("⚠️ Azure Storage connection string not found. Using development storage emulator.");
-            _logger.LogInformation("Searched in: ConnectionStrings:AzureStorage, Azure:Storage:ConnectionString, Azure__Storage__ConnectionString, AZURE_STORAGE_CONNECTION_STRING");
-            connectionString = "UseDevelopmentStorage=true";
+            var message = "❌ Azure Storage connection string is required but not found. Please configure the connection string in Azure Portal.";
+            _logger.LogCritical(message);
+            throw new InvalidOperationException(message);
         }
-        else
-        {
-            _logger.LogInformation("✅ Azure Storage connection string found");
-        }
+
+        _logger.LogInformation("✅ Azure Storage connection string found and configured");
         
         _tableServiceClient = new TableServiceClient(connectionString);
-        _logger.LogInformation("🔗 Azure Storage client initialized");
+        _logger.LogInformation("🔗 Azure Storage client initialized successfully");
     }
 
     public async Task InitializeAsync()

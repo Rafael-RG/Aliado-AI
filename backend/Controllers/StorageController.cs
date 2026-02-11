@@ -39,7 +39,7 @@ public class StorageController : ControllerBase
                 StorageType = storageType,
                 IsAzureStorage = storageType.Contains("Azure"),
                 IsInMemoryStorage = storageType.Contains("InMemory"),
-                ConnectionString = storageType.Contains("Azure") ? "Azure Table Storage (Azurite Emulator)" : "In-Memory Dictionary",
+                ConnectionString = storageType.Contains("Azure") ? "Azure Table Storage (Production)" : "In-Memory Dictionary",
                 Statistics = new
                 {
                     TotalUsers = users.Count(),
@@ -51,7 +51,7 @@ public class StorageController : ControllerBase
                 },
                 DemoUser = users.FirstOrDefault()?.Email ?? "No demo user found",
                 Message = storageType.Contains("Azure") 
-                    ? "✅ Datos almacenados en Azure Table Storage" 
+                    ? "✅ Datos almacenados en Azure Table Storage (Producción)" 
                     : "⚠️ Datos almacenados en memoria (temporal)"
             };
 
