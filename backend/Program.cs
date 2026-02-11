@@ -75,13 +75,11 @@ app.UseCors("AllowAll");
 app.MapControllers();
 
 // Initialize data storage
-/*
 using (var scope = app.Services.CreateScope())
 {
     var dataStorage = scope.ServiceProvider.GetRequiredService<IDataStorageService>();
     await dataStorage.InitializeAsync();
 }
-*/
 
 // Environment configuration check
 var configuration = app.Services.GetRequiredService<IConfiguration>();
