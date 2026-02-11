@@ -132,12 +132,20 @@ const Auth: React.FC<Props> = ({ onLogin }) => {
             {view === 'login' ? '¿Eres nuevo? Regístrate aquí' : '¿Ya tienes cuenta? Entra'}
           </button>
           
-          <a 
-            href="/terminos-de-uso-y-condiciones"
-            className="text-xs font-medium text-slate-300 hover:text-slate-500 transition-colors inline-block"
-          >
-            Términos y Condiciones de Uso
-          </a>
+          <div className="flex justify-center gap-6 text-xs">
+            <a 
+              href="/terminos-de-uso-y-condiciones"
+              className="font-medium text-slate-300 hover:text-slate-500 transition-colors"
+            >
+              Términos y Condiciones de Uso
+            </a>
+            <a 
+              href="/marketing"
+              className="font-medium text-slate-300 hover:text-[#10b981] transition-colors"
+            >
+              ¿Por qué Aliado IA?
+            </a>
+          </div>
         </div>
 
         <p className="text-[9px] text-slate-200 font-bold uppercase tracking-[0.4em] text-center mt-8">ALIADO IA</p>

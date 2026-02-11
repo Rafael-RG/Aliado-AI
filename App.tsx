@@ -246,6 +246,16 @@ const App: React.FC = () => {
         </nav>
 
         <div className="p-6 space-y-3">
+          <a 
+            href="/marketing" 
+            target="_blank"
+            className="w-full flex items-center gap-4 px-4 py-3 rounded-xl text-sm transition-all text-slate-500 hover:text-[#10b981] hover:bg-green-50"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            <span className="font-medium">¿Por qué Aliado IA?</span>
+          </a>
           <button onClick={() => setActiveTab('profile')} className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl text-sm transition-all ${activeTab === 'profile' ? 'bg-slate-100 text-slate-700 font-semibold' : 'text-slate-500 hover:text-slate-700'}`}>
             <ICONS.User className="w-5 h-5" /> 
             <span className="font-medium">Mi Perfil</span>

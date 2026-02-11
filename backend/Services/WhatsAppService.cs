@@ -77,7 +77,7 @@ public class WhatsAppService : IWhatsAppService
         return false;
     }
     
-    public async Task<string> ProcessIncomingMessageAsync(dynamic webhookData, string botId)
+    public async Task<WhatsAppMessageResult> ProcessIncomingMessageAsync(dynamic webhookData, string botId)
     {
         try
         {
@@ -86,7 +86,7 @@ public class WhatsAppService : IWhatsAppService
             if (bot == null)
             {
                 _logger.LogWarning("Bot not found: {BotId}", botId);
-                return "Bot configuration not found";
+                return new WhatsAppMessageResult("Bot configuration not found", "");
             }
             
             // Extract message from webhook data
@@ -121,18 +121,18 @@ public class WhatsAppService : IWhatsAppService
                                 $"Bot: {bot.Name}, Business: {bot.BusinessId}"
                             );
                             
-                            return aiResponse;
+                            return new WhatsAppMessageResult(aiResponse, senderPhone ?? "");
                         }
                     }
                 }
             }
             
-            return "No pude procesar el mensaje";
+            return new WhatsAppMessageResult("No pude procesar el mensaje", "");
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error processing incoming message");
-            return "Error procesando el mensaje";
+            return new WhatsAppMessageResult("Error procesando el mensaje", "");
         }
     }
     

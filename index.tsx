@@ -6,6 +6,7 @@ import App from './App';
 import PublicTermsPage from './components/PublicTermsPage';
 import PublicPrivacyPage from './components/PublicPrivacyPage';
 import TermsAndConditions from './components/TermsAndConditions';
+import MarketingPage from './components/MarketingPage';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
@@ -21,6 +22,7 @@ root.render(
         <Route path="/legal" element={<PublicTermsPage />} />
         <Route path="/privacy" element={<PublicPrivacyPage />} />
         <Route path="/terminos-de-uso-y-condiciones" element={<TermsAndConditions />} />
+        <Route path="/marketing" element={<MarketingPage />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

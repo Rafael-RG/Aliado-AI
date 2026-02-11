@@ -87,11 +87,25 @@ public class WhatsAppController : ControllerBase
             
             if (firstBot != null)
             {
-                var response = await _whatsAppService.ProcessIncomingMessageAsync(webhookData, firstBot.Id);
-                _logger.LogInformation("🤖 Generated response: {Response}", response);
+                var result = await _whatsAppService.ProcessIncomingMessageAsync(webhookData, firstBot.Id);
                 
-                // Here you would normally send the response back
-                // For now, we just log it
+                if (!string.IsNullOrEmpty(result.Response) && !string.IsNullOrEmpty(result.SenderPhone))
+                {
+                    // Send the AI response back to WhatsApp
+                    var phoneNumberId = _configuration["WhatsApp:PhoneNumberId"];
+                    var accessToken = _configuration["WhatsApp:AccessToken"];
+                    
+                    if (!string.IsNullOrEmpty(phoneNumberId) && !string.IsNullOrEmpty(accessToken))
+                    {
+                        var sent = await _whatsAppService.SendMessageAsync(phoneNumberId, accessToken, result.SenderPhone, result.Response);
+                        _logger.LogInformation("🤖 AI response sent to {Phone}: {Response} - Success: {Success}", 
+                            result.SenderPhone, result.Response, sent);
+                    }
+                    else
+                    {
+                        _logger.LogWarning("⚠️ WhatsApp credentials not configured - cannot send response");
+                    }
+                }
             }
             
             return Ok(new { status = "received" });
@@ -116,14 +130,29 @@ public class WhatsAppController : ControllerBase
             {
                 return NotFound($"Bot {botId} not found");
             }
+
+            // Process the message and get AI response
+            var result = await _whatsAppService.ProcessIncomingMessageAsync(webhookData, botId);
             
-            var response = await _whatsAppService.ProcessIncomingMessageAsync(webhookData, botId);
-            _logger.LogInformation("🤖 Generated response for bot {BotId}: {Response}", botId, response);
+            if (!string.IsNullOrEmpty(result.Response) && !string.IsNullOrEmpty(result.SenderPhone))
+            {
+                // Send the AI response back to WhatsApp
+                var phoneNumberId = _configuration["WhatsApp:PhoneNumberId"];
+                var accessToken = _configuration["WhatsApp:AccessToken"];
+                
+                if (!string.IsNullOrEmpty(phoneNumberId) && !string.IsNullOrEmpty(accessToken))
+                {
+                    var sent = await _whatsAppService.SendMessageAsync(phoneNumberId, accessToken, result.SenderPhone, result.Response);
+                    _logger.LogInformation("🤖 AI response sent to {Phone}: {Response} - Success: {Success}", 
+                        result.SenderPhone, result.Response, sent);
+                }
+                else
+                {
+                    _logger.LogWarning("⚠️ WhatsApp credentials not configured - cannot send response");
+                }
+            }
             
-            // Here you would send the response back via WhatsApp API
-            // For now, we just return the response
-            
-            return Ok(new { status = "received", response = response });
+            return Ok(new { status = "received" });
         }
         catch (Exception ex)
         {
