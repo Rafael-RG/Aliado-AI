@@ -37,7 +37,14 @@ builder.Services.AddLogging(logging =>
 });
 
 // Register application services
-builder.Services.AddSingleton<IDataStorageService, AzureStorageService>();
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddSingleton<IDataStorageService, InMemoryDataStorageService>();
+}
+else
+{
+    builder.Services.AddSingleton<IDataStorageService, AzureStorageService>();
+}
 builder.Services.AddScoped<IGeminiService, GeminiService>();
 builder.Services.AddScoped<IWhatsAppService, WhatsAppService>();
 
@@ -68,11 +75,13 @@ app.UseCors("AllowAll");
 app.MapControllers();
 
 // Initialize data storage
+/*
 using (var scope = app.Services.CreateScope())
 {
     var dataStorage = scope.ServiceProvider.GetRequiredService<IDataStorageService>();
     await dataStorage.InitializeAsync();
 }
+*/
 
 // Environment configuration check
 var configuration = app.Services.GetRequiredService<IConfiguration>();
