@@ -81,6 +81,10 @@ app.MapGet("/health", () => new {
 // Map controllers
 app.MapControllers();
 
+// Environment configuration check
+var configuration = app.Services.GetRequiredService<IConfiguration>();
+var logger = app.Services.GetRequiredService<ILogger<Program>>();
+
 // Initialize data storage safely
 try
 {
@@ -95,10 +99,6 @@ catch (Exception ex)
 {
     logger.LogError(ex, "❌ Failed to initialize data storage - app will continue without it");
 }
-
-// Environment configuration check
-var configuration = app.Services.GetRequiredService<IConfiguration>();
-var logger = app.Services.GetRequiredService<ILogger<Program>>();
 
 // Configure port for Azure App Service
 var port = Environment.GetEnvironmentVariable("PORT") ?? 
